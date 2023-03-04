@@ -5,56 +5,104 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.themoviedatabase.R
+import android.widget.SearchView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviedatabase.databinding.FragmentMovieBinding
+import com.example.themoviedatabase.movie.domain.model.Movies
+import com.example.themoviedatabase.movie.presentation.viewmodel.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class MovieFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    @Inject
+    lateinit var moviesViewModel: MoviesViewModel
+    private var movieFragmentBinding: FragmentMovieBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false)
+    ): View = FragmentMovieBinding.inflate(inflater,container,false).also {
+        movieFragmentBinding = it
+        initViews()
+    }.root
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        movieFragmentBinding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                moviesViewModel.movies.collect { movies ->
+                    if (movies != null) {
+                        loadMovies(data = movies)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadMovies(data: Movies) {
+        (movieFragmentBinding?.rvMoviesData?.adapter as? MovieAdapter)?.updateData(
+            newData = data.results
+        )
+    }
+
+    private fun initViews() {
+        with(movieFragmentBinding?.rvMoviesData) {
+            this?.layoutManager = GridLayoutManager(context, 3)
+            this?.adapter = MovieAdapter()
+            getMoviesByTitle()
+            scrollListener()
+        }
+    }
+
+    private fun scrollListener() {
+        with(movieFragmentBinding?.rvMoviesData) {
+            this?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager: LinearLayoutManager? =
+                        recyclerView.layoutManager as LinearLayoutManager?
+                    if (layoutManager?.findLastCompletelyVisibleItemPosition() == recyclerView.adapter?.itemCount?.minus(
+                            1
+                        )
+                    ) {
+                        moviesViewModel.onEndOfScrollReached()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun getMoviesByTitle() {
+        movieFragmentBinding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val adapter = movieFragmentBinding?.rvMoviesData?.adapter as MovieAdapter
+                adapter.movieList.clear()
+                moviesViewModel.fetchMoviesByTitle(query.toString().uppercase())
+                movieFragmentBinding?.searchView?.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return true
+            }
+        })
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MovieFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MovieFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance(): MovieFragment = MovieFragment().apply { arguments = Bundle() }
     }
+
 }
