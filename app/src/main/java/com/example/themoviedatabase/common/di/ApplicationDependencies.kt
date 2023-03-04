@@ -1,10 +1,14 @@
 package com.example.themoviedatabase.common.di
 
+import android.content.Context
+import androidx.room.Room
+import com.example.themoviedatabase.common.db.ApplicationDatabase
 import com.example.themoviedatabase.common.utils.getRetrofitInstance
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -30,4 +34,11 @@ object UtilsModule {
     fun provideGsonConverterFactory(): Converter.Factory =
         GsonConverterFactory.create()
 
+    @Singleton
+    @Provides
+    fun providesRoomDatabaseInstance(@ApplicationContext applicationContext: Context) : ApplicationDatabase =
+        Room.databaseBuilder(
+            applicationContext,
+            ApplicationDatabase::class.java,"the-movie-database-db"
+        ).build()
 }
