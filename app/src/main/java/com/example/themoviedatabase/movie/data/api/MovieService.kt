@@ -18,6 +18,7 @@ interface MovieService {
     suspend fun getAllPopularMovies(@Query ("api_key") api_key: String = API_KEY,
                                     @Query("page") page: Int = 1): Response<MoviesDto?>
 
+
     @GET("search/movie")
     suspend fun getSearchedMovies(@Query ("api_key") api_key: String = API_KEY,
                                   @Query("query") query: String,
