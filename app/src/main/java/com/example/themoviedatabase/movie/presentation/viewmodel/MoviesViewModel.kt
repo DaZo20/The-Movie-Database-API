@@ -6,10 +6,7 @@ import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
 import com.example.themoviedatabase.movie.data.repository.TMDBMovieRepository
 import com.example.themoviedatabase.movie.domain.MovieDomainLayerContract
 import com.example.themoviedatabase.movie.domain.model.Movies
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -83,9 +80,9 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun deleteFavoriteMovie(movie: FavoriteMovieEntity) {
+    fun deleteFavoriteMovie(title: String) {
         viewModelScope.launch {
-            TMDBMovieRepository.deleteFavoriteMovies(movie)
+            TMDBMovieRepository.deleteFavoriteMovies(title)
         }
     }
 }

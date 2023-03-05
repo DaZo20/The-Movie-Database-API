@@ -22,7 +22,7 @@ interface MovieDomainLayerContract {
             suspend fun getPopularMoviesByName(query: String): Result<Movies>
             suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
             suspend fun insertFavoriteMovies(favMovie: FavoriteMovieEntity)
-            suspend fun deleteFavoriteMovies(favMovie: FavoriteMovieEntity)
+            suspend fun deleteFavoriteMovies(title: String)
         }
     }
 

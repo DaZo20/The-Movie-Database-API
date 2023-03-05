@@ -16,7 +16,8 @@ import com.example.themoviedatabase.movie.domain.model.Movie
 // Copyright (c) 2023 DZ. All rights reserved.
 //
 class FavoriteMovieAdapter(
-    var favoriteMovieList: MutableList<FavoriteMovieEntity> = mutableListOf()
+    var favoriteMovieList: MutableList<FavoriteMovieEntity> = mutableListOf(),
+    private val onItemClicked: (FavoriteMovieEntity) -> Unit
 ) : RecyclerView.Adapter<FavoriteMovieAdapter.FavoriteMovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteMovieViewHolder {
@@ -26,7 +27,7 @@ class FavoriteMovieAdapter(
     }
 
     override fun onBindViewHolder(holder: FavoriteMovieViewHolder, position: Int) =
-        holder.bindData(favoriteMovieList[position])
+        holder.bindData(favoriteMovieList[position], callback = onItemClicked)
 
     override fun getItemCount(): Int = favoriteMovieList.size
 
@@ -42,11 +43,13 @@ class FavoriteMovieAdapter(
         private val releaseYear: TextView by lazy { itemView.findViewById(R.id.release_year) }
         private val averageVote: TextView by lazy { itemView.findViewById(R.id.vote_average) }
 
-        fun bindData(movie: FavoriteMovieEntity) {
+        fun bindData(movie: FavoriteMovieEntity, callback: (FavoriteMovieEntity) -> Unit) {
             imgMovie.load(movie.poster_path)
             movieTitle.text = movie.title
             averageVote.text = movie.vote_average.toString()
             releaseYear.text = movie.release_date
+
+            itemView.setOnClickListener{ callback(movie) }
 
         }
     }
