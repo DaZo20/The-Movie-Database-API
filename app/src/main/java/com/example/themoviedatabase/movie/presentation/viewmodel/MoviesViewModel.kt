@@ -2,11 +2,10 @@ package com.example.themoviedatabase.movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
 import com.example.themoviedatabase.movie.data.repository.TMDBMovieRepository
 import com.example.themoviedatabase.movie.domain.MovieDomainLayerContract
 import com.example.themoviedatabase.movie.domain.model.Movies
-import com.example.themoviedatabase.movie.domain.usecase.GetPopularMoviesNextPageUC
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,8 +30,24 @@ class MoviesViewModel @Inject constructor(
 
     private var _movies: MutableStateFlow<Movies?> = MutableStateFlow(null)
 
+    val favMovies: StateFlow<FavoriteMovieEntity?>
+        get() = _favMovies.asStateFlow()
+
+    private var _favMovies: MutableStateFlow<FavoriteMovieEntity?> = MutableStateFlow(null)
+
     init {
         fetchMoviesData()
+    }
+
+    fun fetchFavoriteMovies() {
+        viewModelScope.launch {
+            val fav = TMDBMovieRepository.getFavoriteMovies()
+            if (fav.isNotEmpty()) {
+                for (item in fav) {
+                    _favMovies.value = item
+                }
+            }
+        }
     }
 
     private fun fetchMoviesData() {
@@ -55,11 +70,22 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun fetchMoviesByTitle(title: String){
+    fun fetchMoviesByTitle(title: String) {
         viewModelScope.launch {
             val searched = TMDBMovieRepository.getPopularMoviesByName(title)
             _movies.value = searched.getOrNull()
         }
     }
 
+    fun saveFavoriteMovies(movie: FavoriteMovieEntity) {
+        viewModelScope.launch {
+            TMDBMovieRepository.insertFavoriteMovies(movie)
+        }
+    }
+
+    fun deleteFavoriteMovie(movie: FavoriteMovieEntity) {
+        viewModelScope.launch {
+            TMDBMovieRepository.deleteFavoriteMovies(movie)
+        }
+    }
 }

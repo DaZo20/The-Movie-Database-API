@@ -1,4 +1,4 @@
-package com.example.themoviedatabase.movie.presentation.view
+package com.example.themoviedatabase.movie.presentation.view.popular
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,6 +17,7 @@ import com.example.themoviedatabase.common.RecyclerListener
 import com.example.themoviedatabase.databinding.FragmentMovieBinding
 import com.example.themoviedatabase.movie.domain.model.Movie
 import com.example.themoviedatabase.movie.domain.model.Movies
+import com.example.themoviedatabase.movie.presentation.view.detail.DetailFragment
 import com.example.themoviedatabase.movie.presentation.viewmodel.MoviesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -126,6 +127,7 @@ class MovieFragment : Fragment(), RecyclerListener {
         bundle.putString("title", movie.title)
         bundle.putString("date", movie.release_date)
         bundle.putString("overview", movie.overview)
+        bundle.putString("vote", movie.vote_average.toString())
         detailFragment.arguments = bundle
         parentFragmentManager.setFragmentResult("detail_key", bundle)
         detailFragment.show(parentFragmentManager, "detail")

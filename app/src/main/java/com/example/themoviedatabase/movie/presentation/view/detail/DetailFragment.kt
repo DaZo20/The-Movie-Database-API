@@ -1,17 +1,13 @@
-package com.example.themoviedatabase.movie.presentation.view
+package com.example.themoviedatabase.movie.presentation.view.detail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentResultListener
+import android.widget.Toast
 import coil.load
-import com.example.themoviedatabase.BuildConfig.API_IMAGES_URL
-import com.example.themoviedatabase.R
 import com.example.themoviedatabase.databinding.FragmentDetailBinding
 import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
-import com.example.themoviedatabase.movie.domain.model.Movie
 import com.example.themoviedatabase.movie.presentation.viewmodel.MoviesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,22 +43,27 @@ class DetailFragment : BottomSheetDialogFragment() {
             val title = result.getString("title")
             val date = result.getString("date")
             val overview = result.getString("overview")
+            val vote = result.getString("vote")
 
             detailBinding?.posterImg?.load(img)
             detailBinding?.titleTv?.text = title
             detailBinding?.dateTv?.text = date
             detailBinding?.desctriptionTv?.text = overview
+            detailBinding?.voteAverage?.text = vote
 
             detailBinding?.favButton?.setOnClickListener {
                 moviesViewModel.saveFavoriteMovies(
                     movie = FavoriteMovieEntity(
                         id = id,
                         title = title.toString(),
+                        vote_average = vote.toString(),
                         overview = overview.toString(),
                         poster_path = img.toString(),
                         release_date = date.toString()
                     )
                 )
+                dismiss()
+                Toast.makeText(context,"${title.toString()} añadida a favoritos", Toast.LENGTH_SHORT).show()
             }
         }
     }
