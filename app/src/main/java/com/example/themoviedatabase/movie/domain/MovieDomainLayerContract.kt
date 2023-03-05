@@ -1,5 +1,6 @@
 package com.example.themoviedatabase.movie.domain
 
+import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
 import com.example.themoviedatabase.movie.domain.model.Movies
 
 //
@@ -19,6 +20,9 @@ interface MovieDomainLayerContract {
             suspend fun getAllPopularMovies(): Result<Movies>
             suspend fun getPopularMoviesNextPage(): Result<Movies>
             suspend fun getPopularMoviesByName(query: String): Result<Movies>
+            suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
+            suspend fun insertFavoriteMovies(favMovie: FavoriteMovieEntity)
+            suspend fun deleteFavoriteMovies(favMovie: FavoriteMovieEntity)
         }
     }
 
