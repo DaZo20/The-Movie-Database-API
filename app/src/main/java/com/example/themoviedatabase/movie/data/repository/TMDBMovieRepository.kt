@@ -1,6 +1,7 @@
 package com.example.themoviedatabase.movie.data.repository
 
 import com.example.themoviedatabase.movie.data.datasource.MovieDataSource
+import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
 import com.example.themoviedatabase.movie.data.utils.toMovieEntity
 import com.example.themoviedatabase.movie.data.utils.toMovies
 import com.example.themoviedatabase.movie.domain.MovieDomainLayerContract
@@ -44,4 +45,24 @@ object TMDBMovieRepository :
                 dto.toMovies()
             }
         }
+
+    override suspend fun getFavoriteMovies(): List<FavoriteMovieEntity> =
+        withContext(Dispatchers.IO) {
+            moviesLocalDataSource.fetchAllFavoriteMovies().map { fav ->
+            fav
+            }
+        }
+
+    override suspend fun insertFavoriteMovies(favMovie: FavoriteMovieEntity) =
+        withContext(Dispatchers.IO) {
+            moviesLocalDataSource.saveFavoriteMovie(favMovie)
+        }
+
+
+    override suspend fun deleteFavoriteMovies(favMovie: FavoriteMovieEntity) =
+        withContext(Dispatchers.IO) {
+            moviesLocalDataSource.deleteFavoriteMovie(favMovie)
+        }
+
+
 }

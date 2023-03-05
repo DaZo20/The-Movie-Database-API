@@ -12,6 +12,7 @@ import com.example.themoviedatabase.movie.domain.model.Movies
 //
 
 const val DEFAULT_INT = 1
+const val DEFAULT_DOUBLE = 0.0
 const val DEFAULT_STRING = ""
 val DEFAULT_LIST_INT: List<Int> = listOf()
 
@@ -40,25 +41,16 @@ fun List<MovieDto>.toMovieList(): List<Movie> =
         }
     }
 
-fun MoviesDto.toMovieEntity(page: Int): List<FavoriteMovieEntity> =
+fun MoviesDto.toMovieEntity(): List<FavoriteMovieEntity> =
     results.map { dto ->
         with(dto) {
             FavoriteMovieEntity(
-                adult = adult,
-                backdrop_path = backdrop_path,
-                page = page,
-                genre_ids = genre_ids,
                 id  = id,
-                original_language = original_language,
-                original_title = original_title,
                 overview = overview,
-                popularity = popularity,
                 poster_path = poster_path,
                 release_date = release_date ?: "",
                 title = title,
-                video = video,
-                vote_average = vote_average,
-                vote_count = vote_count
+                vote_average = vote_average.toString()
             )
         }
     }
@@ -68,21 +60,22 @@ fun List<FavoriteMovieEntity>.toMovies(): Movies =
         results = this.map { entity ->
             with(entity) {
                 Movie(
-                    adult = adult,
-                    backdrop_path = backdrop_path,
-                    genre_ids = genre_ids,
+                    adult = false,
+                    backdrop_path = DEFAULT_STRING,
+                    genre_ids = listOf(),
                     id = id,
-                    original_language = original_language,
-                    original_title = original_title,
+                    original_language = DEFAULT_STRING,
+                    original_title = DEFAULT_STRING,
                     overview = overview,
-                    popularity = popularity,
+                    popularity = DEFAULT_DOUBLE,
                     poster_path = poster_path,
                     release_date = release_date,
                     title = title,
-                    video = video,
-                    vote_average = vote_average,
-                    vote_count = vote_count
+                    video = false,
+                    vote_average = DEFAULT_DOUBLE,
+                    vote_count = DEFAULT_INT
                 )
             }
         }
     )
+
