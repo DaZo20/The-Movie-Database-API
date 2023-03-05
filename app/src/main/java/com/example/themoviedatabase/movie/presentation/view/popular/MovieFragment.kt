@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedatabase.BuildConfig.API_IMAGES_URL
-import com.example.themoviedatabase.common.RecyclerListener
+import com.example.themoviedatabase.common.RecyclerListenerMovie
 import com.example.themoviedatabase.databinding.FragmentMovieBinding
 import com.example.themoviedatabase.movie.domain.model.Movie
 import com.example.themoviedatabase.movie.domain.model.Movies
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MovieFragment : Fragment(), RecyclerListener {
+class MovieFragment : Fragment(), RecyclerListenerMovie {
 
     @Inject
     lateinit var moviesViewModel: MoviesViewModel

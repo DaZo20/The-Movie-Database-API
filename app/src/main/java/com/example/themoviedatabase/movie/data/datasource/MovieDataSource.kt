@@ -23,7 +23,7 @@ interface MovieDataSource {
     interface Local {
         suspend fun saveFavoriteMovie(favMovie: FavoriteMovieEntity)
         suspend fun fetchAllFavoriteMovies(): List<FavoriteMovieEntity>
-        suspend fun deleteFavoriteMovie(favMovie: FavoriteMovieEntity)
+        suspend fun deleteFavoriteMovie(title: String)
     }
 }
 
@@ -54,8 +54,8 @@ class TMDBMovieDataSource @Inject constructor(
     override suspend fun fetchAllFavoriteMovies(): List<FavoriteMovieEntity> =
         roomDatabaseInstance.favoriteMoviesDao().getAllFavoriteMovies()
 
-    override suspend fun deleteFavoriteMovie(favMovie: FavoriteMovieEntity) =
-        roomDatabaseInstance.favoriteMoviesDao().deleteFavoriteMovie(favMovie)
+    override suspend fun deleteFavoriteMovie(title: String) =
+        roomDatabaseInstance.favoriteMoviesDao().deleteFavMovieTitle(title)
 
 
 }

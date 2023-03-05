@@ -57,9 +57,9 @@ object TMDBMovieRepository :
         }
 
 
-    override suspend fun deleteFavoriteMovies(favMovie: FavoriteMovieEntity) =
+    override suspend fun deleteFavoriteMovies(title: String) =
         withContext(Dispatchers.IO) {
-            moviesLocalDataSource.deleteFavoriteMovie(favMovie)
+            moviesLocalDataSource.deleteFavoriteMovie(title)
         }
 
 
