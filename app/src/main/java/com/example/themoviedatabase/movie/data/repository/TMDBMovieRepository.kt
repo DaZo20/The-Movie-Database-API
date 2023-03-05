@@ -48,9 +48,7 @@ object TMDBMovieRepository :
 
     override suspend fun getFavoriteMovies(): List<FavoriteMovieEntity> =
         withContext(Dispatchers.IO) {
-            moviesLocalDataSource.fetchAllFavoriteMovies().map { fav ->
-            fav
-            }
+            moviesLocalDataSource.fetchAllFavoriteMovies()
         }
 
     override suspend fun insertFavoriteMovies(favMovie: FavoriteMovieEntity) =
