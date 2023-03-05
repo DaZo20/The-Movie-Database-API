@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="CustomedCheck" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:layout_marginStart">12dp</item>
+    </style>
 </resources>
