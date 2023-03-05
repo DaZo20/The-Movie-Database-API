@@ -12,24 +12,29 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviedatabase.BuildConfig.API_IMAGES_URL
+import com.example.themoviedatabase.common.RecyclerListener
 import com.example.themoviedatabase.databinding.FragmentMovieBinding
+import com.example.themoviedatabase.movie.domain.model.Movie
 import com.example.themoviedatabase.movie.domain.model.Movies
 import com.example.themoviedatabase.movie.presentation.viewmodel.MoviesViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(), RecyclerListener {
 
     @Inject
     lateinit var moviesViewModel: MoviesViewModel
     private var movieFragmentBinding: FragmentMovieBinding? = null
-
+    private val detailFragment: Fragment by lazy { DetailFragment.newInstance() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentMovieBinding.inflate(inflater,container,false).also {
+    ): View = FragmentMovieBinding.inflate(inflater, container, false).also {
         movieFragmentBinding = it
         initViews()
     }.root
@@ -61,10 +66,13 @@ class MovieFragment : Fragment() {
     private fun initViews() {
         with(movieFragmentBinding?.rvMoviesData) {
             this?.layoutManager = GridLayoutManager(context, 3)
-            this?.adapter = MovieAdapter()
+            this?.adapter = MovieAdapter(onItemClicked = { movie ->
+                onRecyclerItemSelected(movie)
+            })
             getMoviesByTitle()
             scrollListener()
         }
+
     }
 
     private fun scrollListener() {
@@ -78,7 +86,10 @@ class MovieFragment : Fragment() {
                             1
                         )
                     ) {
-                        moviesViewModel.onEndOfScrollReached()
+                        val adapter = movieFragmentBinding?.rvMoviesData?.adapter as MovieAdapter
+                        if (adapter.movieList.isNotEmpty()) {
+                            moviesViewModel.onEndOfScrollReached()
+                        }
                     }
                 }
             })
@@ -86,12 +97,15 @@ class MovieFragment : Fragment() {
     }
 
     private fun getMoviesByTitle() {
-        movieFragmentBinding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        val adapter = movieFragmentBinding?.rvMoviesData?.adapter as MovieAdapter
+
+        movieFragmentBinding?.searchView?.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val adapter = movieFragmentBinding?.rvMoviesData?.adapter as MovieAdapter
-                adapter.movieList.clear()
                 moviesViewModel.fetchMoviesByTitle(query.toString().uppercase())
+                movieFragmentBinding?.searchView?.setQuery("", false)
                 movieFragmentBinding?.searchView?.clearFocus()
+                adapter.movieList.clear()
                 return true
             }
 
@@ -103,6 +117,18 @@ class MovieFragment : Fragment() {
 
     companion object {
         fun newInstance(): MovieFragment = MovieFragment().apply { arguments = Bundle() }
+    }
+
+    override fun onRecyclerItemSelected(movie: Movie) {
+        val detailFragment: BottomSheetDialogFragment = detailFragment as BottomSheetDialogFragment
+        val bundle = Bundle()
+        bundle.putString("img", API_IMAGES_URL + movie.poster_path)
+        bundle.putString("title", movie.title)
+        bundle.putString("date", movie.release_date)
+        bundle.putString("overview", movie.overview)
+        detailFragment.arguments = bundle
+        parentFragmentManager.setFragmentResult("detail_key", bundle)
+        detailFragment.show(parentFragmentManager, "detail")
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.themoviedatabase.common.db
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -11,10 +12,9 @@ import com.example.themoviedatabase.movie.data.db.FavoriteMoviesDao
 // Copyright (c) 2023 DZ. All rights reserved.
 //
 
-@Database(entities = [FavoriteMovieEntity::class], version = 2)
+@Database(entities = [FavoriteMovieEntity::class], version = 1)
 @TypeConverters(ReferenceListConverter::class)
 abstract class ApplicationDatabase : RoomDatabase() {
-
     abstract fun favoriteMoviesDao(): FavoriteMoviesDao
 
 }
