@@ -12,10 +12,7 @@ interface FavoriteMoviesDao {
     @Query("SELECT * FROM favorite_movies_table")
     suspend fun getAllFavoriteMovies(): List<FavoriteMovieEntity>
 
-    @Query("SELECT * FROM favorite_movies_table WHERE page = :page")
-    suspend fun getFavoriteMoviesByPage(page: Int): List<FavoriteMovieEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavoriteMovie(favMovie: FavoriteMovieEntity)
 
     @Delete
