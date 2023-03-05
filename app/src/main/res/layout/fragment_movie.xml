@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".movie.presentation.view.MovieFragment"
+    tools:context=".movie.presentation.view.popular.MovieFragment"
     >
 
     <SearchView
@@ -18,9 +18,11 @@
         android:commitIcon="@drawable/search"
         android:searchHintIcon="@drawable/search"
         android:searchIcon="@drawable/search"
+        android:iconifiedByDefault="false"
         android:queryHint="Search Movie"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@id/rv_movies_data"
         app:layout_constraintEnd_toEndOf="parent"

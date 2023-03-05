@@ -8,7 +8,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_view"
-        android:name="com.example.themoviedatabase.movie.presentation.view.MovieFragment"
+        android:name="com.example.themoviedatabase.movie.presentation.view.popular.MovieFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
@@ -22,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/black"
         app:itemTextColor="@color/white"
-        app:itemIconTint="@color/teal_200"
         app:elevation="10dp"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
