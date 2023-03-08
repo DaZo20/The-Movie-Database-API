@@ -18,7 +18,7 @@
 - Architecture -> Clean
 - Json Converter -> Gson
 - HTTP Client -> Retrofit2
-- Firebase -> Auth & Crashlytics
+- Firebase -> Analytics & Crashlytics
 - Database -> Room
 - Dependency injection -> Dagger Hilt
 - Unit Testing -> Mockito
