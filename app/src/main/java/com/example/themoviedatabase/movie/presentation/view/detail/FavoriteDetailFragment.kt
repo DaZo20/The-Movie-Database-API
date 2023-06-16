@@ -8,7 +8,9 @@ import android.widget.Toast
 import coil.load
 import com.example.themoviedatabase.R
 import com.example.themoviedatabase.databinding.FragmentFavoriteDetailBinding
+import com.example.themoviedatabase.databinding.FragmentFavoriteMoviesBinding
 import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
+import com.example.themoviedatabase.movie.presentation.view.favorite.FavoriteMovieAdapter
 import com.example.themoviedatabase.movie.presentation.viewmodel.MoviesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +52,7 @@ class FavoriteDetailFragment : BottomSheetDialogFragment() {
             favoriteDetailBinding?.desctriptionTv?.text = overview
             favoriteDetailBinding?.voteAverage?.text = vote
 
-            favoriteDetailBinding?.favDeleteButton?.setOnClickListener {
+            favoriteDetailBinding?.favDeleteButton?.setOnClickListener{
                 moviesViewModel.deleteFavoriteMovie(title.toString())
                 dismiss()
                 Toast.makeText(context,"${title.toString()} eliminada de favoritos", Toast.LENGTH_SHORT).show()
