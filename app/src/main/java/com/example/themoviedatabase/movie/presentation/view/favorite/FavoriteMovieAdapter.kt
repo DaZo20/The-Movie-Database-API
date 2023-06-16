@@ -36,6 +36,12 @@ class FavoriteMovieAdapter(
         notifyDataSetChanged()
     }
 
+    fun deleteData(movie: FavoriteMovieEntity) {
+        favoriteMovieList.remove(movie)
+        notifyItemRemoved(movie.id)
+        notifyDataSetChanged()
+    }
+
     inner class FavoriteMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val imgMovie: ImageView by lazy { itemView.findViewById(R.id.img_movie) }
@@ -46,10 +52,10 @@ class FavoriteMovieAdapter(
         fun bindData(movie: FavoriteMovieEntity, callback: (FavoriteMovieEntity) -> Unit) {
             imgMovie.load(movie.poster_path)
             movieTitle.text = movie.title
-            averageVote.text = movie.vote_average.toString()
+            averageVote.text = movie.vote_average
             releaseYear.text = movie.release_date
 
-            itemView.setOnClickListener{ callback(movie) }
+            itemView.setOnClickListener { callback(movie) }
 
         }
     }

@@ -12,10 +12,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_movies_table", indices = [Index(value = ["title"], unique = true)])
 data class FavoriteMovieEntity (
-        @PrimaryKey(autoGenerate = true) val id: Int,
-        val title: String,
-        val poster_path: String?,
-        val vote_average: String,
-        val release_date: String,
-        val overview: String,
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    var title: String,
+    val poster_path: String?,
+    val vote_average: String,
+    val release_date: String,
+    val overview: String,
         )
