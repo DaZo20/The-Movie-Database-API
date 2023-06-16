@@ -3,6 +3,7 @@ package com.example.themoviedatabase.movie.domain.di
 import com.example.themoviedatabase.movie.domain.MovieDomainLayerContract
 import com.example.themoviedatabase.movie.domain.model.Movies
 import com.example.themoviedatabase.movie.domain.usecase.GetAllPopularMoviesUC
+import com.example.themoviedatabase.movie.domain.usecase.GetPopularMoviesByNameUC
 import com.example.themoviedatabase.movie.domain.usecase.GetPopularMoviesNextPageUC
 import dagger.Module
 import dagger.Provides
@@ -27,4 +28,11 @@ object MovieDomainModule {
     @Provides
     @Named("get_popular_movies_next_page")
     fun providesGetPopularMoviesNextPageUC(getNextPageUC: GetPopularMoviesNextPageUC) : @JvmSuppressWildcards MovieDomainLayerContract.PresentationLayer.UseCase<Movies> = getNextPageUC
+
+
+    @Provides
+    @Named("get_popular_movies_by_name")
+    fun providesGetPopularMoviesByNameUC(getByName: GetPopularMoviesByNameUC) : @JvmSuppressWildcards GetPopularMoviesByNameUC =
+        getByName
+
 }

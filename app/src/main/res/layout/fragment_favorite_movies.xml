@@ -3,12 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".movie.presentation.view.favorite.FavoriteMoviesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_favorite_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:listitem="@layout/favorite_adapter_row"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:orientation="vertical"
+        app:spanCount="3"
         />
 
 </FrameLayout>

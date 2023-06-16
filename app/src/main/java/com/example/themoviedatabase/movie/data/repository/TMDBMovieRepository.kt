@@ -34,17 +34,16 @@ object TMDBMovieRepository :
     override suspend fun getPopularMoviesNextPage(): Result<Movies> =
         moviesRemoteDataSource.getAllPopularMoviesNextPage(page = nextPage).map { dto ->
             dto.toMovies().also {
-            nextPage++
+                nextPage++
             }
         }
 
 
     override suspend fun getPopularMoviesByName(query: String): Result<Movies> =
-        withContext(Dispatchers.IO) {
-            moviesRemoteDataSource.getSearchedMovies(query).map { dto ->
-                dto.toMovies()
-            }
+        moviesRemoteDataSource.getSearchedMovies(query).map { dto ->
+            dto.toMovies()
         }
+
 
     override suspend fun getFavoriteMovies(): List<FavoriteMovieEntity> =
         withContext(Dispatchers.IO) {

@@ -38,8 +38,14 @@ class FavoriteMoviesFragment : Fragment(), RecyclerListenerFavoriteMovie {
         initViews()
     }.root
 
+    override fun onResume() {
+        super.onResume()
+        (favoriteMovieBinding?.rvFavoriteMovies?.adapter as? FavoriteMovieAdapter)?.favoriteMovieList?.clear()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        (favoriteMovieBinding?.rvFavoriteMovies?.adapter as? FavoriteMovieAdapter)?.favoriteMovieList?.clear()
         favoriteMovieBinding = null
     }
 
@@ -60,7 +66,10 @@ class FavoriteMoviesFragment : Fragment(), RecyclerListenerFavoriteMovie {
         (favoriteMovieBinding?.rvFavoriteMovies?.adapter as? FavoriteMovieAdapter)?.updateData(
             newData = listOfNotNull(data)
         )
+
     }
+
+
 
     private fun initViews() {
         with(favoriteMovieBinding?.rvFavoriteMovies) {

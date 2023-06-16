@@ -6,6 +6,7 @@ import com.example.themoviedatabase.movie.data.db.FavoriteMovieEntity
 import com.example.themoviedatabase.movie.data.repository.TMDBMovieRepository
 import com.example.themoviedatabase.movie.domain.MovieDomainLayerContract
 import com.example.themoviedatabase.movie.domain.model.Movies
+import com.example.themoviedatabase.movie.domain.usecase.GetPopularMoviesByNameUC
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +20,8 @@ import javax.inject.Named
 
 class MoviesViewModel @Inject constructor(
     @Named("get_popular_movies") val getAllPopularMoviesUC: MovieDomainLayerContract.PresentationLayer.UseCase<Movies>,
-    @Named("get_popular_movies_next_page") val getPopularMoviesNextPageUC: MovieDomainLayerContract.PresentationLayer.UseCase<Movies>
+    @Named("get_popular_movies_next_page") val getPopularMoviesNextPageUC: MovieDomainLayerContract.PresentationLayer.UseCase<Movies>,
+    @Named("get_popular_movies_by_name") val getPopularMoviesByNameUC: GetPopularMoviesByNameUC
 ) : ViewModel() {
 
     val movies: StateFlow<Movies?>
@@ -69,8 +71,11 @@ class MoviesViewModel @Inject constructor(
 
     fun fetchMoviesByTitle(title: String) {
         viewModelScope.launch {
-            val searched = TMDBMovieRepository.getPopularMoviesByName(title)
-            _movies.value = searched.getOrNull()
+            getPopularMoviesByNameUC(title).onSuccess { movies ->
+                _movies.value = movies
+            }.onFailure { err ->
+                err.printStackTrace()
+            }
         }
     }
 
