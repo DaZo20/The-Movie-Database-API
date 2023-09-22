@@ -23,4 +23,4 @@
 - Dependency injection -> Dagger Hilt
 - Unit Testing -> Mockito
 # Credits
-- [The Movie Data Base API](https://rickandmortyapi.com/)
+- [The Movie Data Base API](https://developer.themoviedb.org/reference/intro/getting-started)
